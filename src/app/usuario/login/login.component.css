@@ -1,0 +1,5 @@
+.btn-pessoal {
+    width: 20%; /* Define a largura do botão como 20% da tela */
+    margin: 20px auto 0; /* Centraliza o botão horizontalmente e adiciona uma margem superior de 20px */
+    display: block; /* Exibe o botão como um bloco para que o margin auto funcione */
+}

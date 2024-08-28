@@ -1,1 +1,7 @@
-<p>usuario works!</p>
+<p>Usuario: {{ usuaioLogado }}</p>
+<div *ngIf="usuaioLogado == 0">
+    <user-login (userLoginEvent)="handleLogin($event)"></user-login>
+</div>
+<div *ngIf="usuaioLogado != 0">
+    <a href="#" class="logout-link" (click)="usuaioLogado = 0">Logout</a>
+</div>

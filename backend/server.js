@@ -19,13 +19,20 @@ let db = new sqlite3.Database('./backend/database.sqlite', (err) => {
 app.use(express.json());
 app.use(cors());
 
-// Rota para obter dados
-app.get('/data', (req, res) => {
-  db.all('SELECT * FROM my_table', [], (err, rows) => {
+// Rota para login de usuários
+app.post('/userlogin', (req, res) => {
+  const { email, senha } = req.body;
+  console.log(`Login attempt for user with email ${email}`);
+  db.get(`SELECT id_usuario FROM usuario WHERE email = ? AND senha = ?`, [email, senha], (err, row) => {
     if (err) {
-      throw err;
+      return console.log(err.message);
     }
-    res.json(rows);
+
+    if (!row) {
+      return res.status(401).json({ error: 'Invalid email or password' });
+    }
+
+    res.json({ id_usuario: row.id_usuario });
   });
 });
 
