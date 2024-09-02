@@ -124,3 +124,5 @@ FOR EACH ROW
 BEGIN
 	UPDATE "venda" SET total = total + (new.preco * new.quantidade) WHERE id_venda = new.id_venda;
 END;
+
+SELECT * FROM item_venda JOIN aplicativo ON item_venda.id_aplicativo = aplicativo.id_aplicativo JOIN venda ON item_venda.id_venda = venda.id_venda WHERE venda.id_usuario = ?;

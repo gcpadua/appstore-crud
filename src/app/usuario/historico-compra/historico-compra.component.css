@@ -1,0 +1,24 @@
+.app-card-container {
+    width: 80%;
+    background-color: #d3d3d3; /* Cor cinza */
+    margin: 0 auto; /* Centraliza a div na tela */
+    padding: 10px; /* Espaçamento interno */
+    }
+  
+  .app-card {
+      border: 1px solid #ddd;
+      padding: 15px;
+      margin: 10px;
+      border-radius: 5px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      background-color: whitesmoke;
+    }
+  
+    .app-card-text{
+      margin: 0;
+    }
+  
+    .app-card-right {
+      margin-top: 5px;
+      position-anchor: right;
+    }

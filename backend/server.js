@@ -86,6 +86,20 @@ app.post('/userlogin', (req, res) => {
   });
 });
 
+// Rota para registrar usuario
+app.post('/userregister', (req, res) => {
+  const { email, senha, primeiroNome, ultimoNome } = req.body;
+  console.log(`Creating cccount with email ${email}, password ${senha}`);
+  db.run(`INSERT INTO usuario (primeiro_nome, ultimo_nome, email, senha) VALUES ( ?, ?, ?, ?)`, [primeiroNome, ultimoNome, email, senha], function(err) {
+    if (err) {
+      return console.log(err.message);
+    }
+
+    console.log(`User created with id ${this.lastID}`);
+    res.json({ id_usuario: this.lastID});
+  });
+});
+
 // Rota para adicionar saldo ao usuário
 app.put('/addbalanceuser/:userid', (req, res) => {
   const { userid } = req.params;
@@ -148,6 +162,18 @@ app.post('/comprarCarrinho', (req, res) => {
   
     res.json({ mensagem: "Compra concluída com sucesso" });
   }, 200);
+});
+
+// Rota para listar compras de um usuário
+app.get('/compras/:userid', (req, res) => {
+  const { userid } = req.params;
+  console.log(`Selecting purchases of user with id ${userid}`);
+  db.all(`SELECT * FROM item_venda JOIN aplicativo ON item_venda.id_aplicativo = aplicativo.id_aplicativo JOIN venda ON item_venda.id_venda = venda.id_venda WHERE venda.id_usuario = ?`, [userid], (err, rows) => {
+    if (err) {
+      return console.log(err.message);
+    }
+    res.json(rows);
+  });
 });
 
 //---------------------------------------------- Rotas de desenvolvedores ------------------------------------------

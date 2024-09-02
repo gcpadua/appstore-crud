@@ -1,0 +1,7 @@
+<div class="app-card-container">
+    <div *ngFor="let compra of historico" class="app-card">
+        <h2>{{ compra.nome }}</h2>
+        <p class="app-card-text"><strong>Descrição:</strong> {{ compra.descricao }}</p>
+        <p class="app-card-text"><strong>Comprado:</strong> {{ compra.preco | currency }} x {{ compra.quantidade }}</p>
+    </div>
+</div>

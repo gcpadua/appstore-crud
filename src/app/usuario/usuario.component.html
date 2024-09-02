@@ -1,7 +1,7 @@
 <p>Usuario: {{ usuarioLogado }}</p>
 <div *ngIf="usuarioLogado == 0">
     <user-login (userLoginEvent)="handleLogin($event)" *ngIf="login_register == 0"></user-login>
-    <user-register *ngIf="login_register == 1"></user-register>
+    <user-register (userRegisterEvent)="handleRegister($event)"*ngIf="login_register == 1"></user-register>
     <div style="display: flex; justify-content: center;">
         <a href="#" (click)="login_register = 1" *ngIf="login_register == 0" style="text-align: center;">
           Não possui conta? Clique aqui para se registrar
@@ -23,4 +23,5 @@
         <label class="btn btn-outline-primary" for="btnradio2" (click)="comprar_historico = 1">Historico de compras</label>
     </div>
     <lista-compra [usuarioId]="usuarioLogado" *ngIf="comprar_historico == 0"></lista-compra>
+    <user-historico-compra [usuarioId]="usuarioLogado" *ngIf="comprar_historico == 1"></user-historico-compra>
 </div>
