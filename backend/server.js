@@ -19,6 +19,56 @@ let db = new sqlite3.Database('./backend/database.sqlite', (err) => {
 app.use(express.json());
 app.use(cors());
 
+// --------------------------------------------- Rotas Gerais -----------------------------------------------
+// Rota para selecionar dados de uma tabela específica
+app.get('/select/:table', (req, res) => {
+  const { table } = req.params;
+  console.log(`Selecting data from table ${table}`);
+  db.all(`SELECT * FROM ${table}`, [], (err, rows) => {
+    if (err) {
+      // Verifica se o erro é devido à tabela não existir
+      if (err.message.includes('no such table')) {
+        return res.status(404).json({ error: `Table ${table} does not exist` });
+      }
+      // Outros erros
+      return res.status(500).json({ error: err.message });
+    }
+    res.json(rows);
+    // console.log(rows);
+  });
+});
+
+// Rota para adicionar dados
+app.post('/data', (req, res) => {
+  const { name } = req.body;
+  db.run(`INSERT INTO my_table(name) VALUES(?)`, [name], function(err) {
+    if (err) {
+      return console.log(err.message);
+    }
+    res.json({ id: this.lastID });
+  });
+});
+
+// Rota select where
+app.get('/where/:table/:condition', (req, res) => {
+  const { table, condition } = req.params;
+  console.log(`Selecting data from table ${table} with condition ${condition}`);
+  db.all(`SELECT * FROM ${table} WHERE ${condition}`, [], (err, rows) => {
+    if (err) {
+      // Verifica se o erro é devido à tabela não existir
+      if (err.message.includes('no such table')) {
+        return res.status(404).json({ error: `Table ${table} does not exist` });
+      }
+      // Outros erros
+      return res.status(500).json({ error: err.message });
+    }
+    res.json(rows);
+  });
+});
+
+
+
+//---------------------------------------------- Rotas de usuarios ------------------------------------------
 // Rota para login de usuários
 app.post('/userlogin', (req, res) => {
   const { email, senha } = req.body;
@@ -36,24 +86,71 @@ app.post('/userlogin', (req, res) => {
   });
 });
 
-// Rota para selecionar dados de uma tabela específica
-app.get('/select/:table', (req, res) => {
-  const { table } = req.params;
-  console.log(`Selecting data from table ${table}`);
-  db.all(`SELECT * FROM ${table}`, [], (err, rows) => {
+// Rota para adicionar saldo ao usuário
+app.put('/addbalanceuser/:userid', (req, res) => {
+  const { userid } = req.params;
+  const { valorAdicionado } = req.body;
+  console.log(`Adding balance to user with id ${userid}; Value: ${valorAdicionado}`);
+  
+  // Verificar se o usuário existe
+  db.get(`SELECT saldo FROM usuario WHERE id_usuario = ?`, [userid], (err, row) => {
     if (err) {
-      // Verifica se o erro é devido à tabela não existir
-      if (err.message.includes('no such table')) {
-        return res.status(404).json({ error: `Table ${table} does not exist` });
-      }
-      // Outros erros
-      return res.status(500).json({ error: err.message });
+      return console.log(err.message);
     }
-    res.json(rows);
-    console.log(rows);
+
+    if (!row) {
+      return res.status(404).json({ error: `User with id ${userid} not found` });
+    }
+
+    const saldoAtual = row.saldo;
+    const novoSaldo = saldoAtual + valorAdicionado;
+
+    // Atualizar o saldo do usuário
+    db.run(`UPDATE usuario SET saldo = ? WHERE id_usuario = ?`, [novoSaldo, userid], function(err) {
+      if (err) {
+        return console.log(err.message);
+      }
+
+      if (this.changes === 0) {
+        return res.status(404).json({ error: `User with id ${userid} not found` });
+      }
+
+      res.json({ message: 'Balance added successfully' });
+    });
   });
 });
 
+// Rota de compra de aplicativo
+app.post('/comprarCarrinho', (req, res) => {
+  const { usuarioId, listaCompras } = req.body;
+  console.log(usuarioId)
+  console.log(listaCompras)
+  data_venda = new Date().toISOString().slice(0, 19).replace('T', ' ');
+  let id_nova_venda;
+  // Inserir nova venda
+  id_nova_venda = db.run(`INSERT INTO venda(id_usuario, data_venda, total) VALUES(?, ?, ?)`, [usuarioId, data_venda, 0], function(err) {
+    if (err) {
+      return console.log(err.message);
+    }
+    console.log(this.lastID);
+    id_nova_venda = this.lastID;
+  });
+
+  setTimeout(() => {
+    console.log(`Inserida venda com id ${id_nova_venda}`);
+    for (item of listaCompras) {
+      db.run(`INSERT INTO item_venda (id_venda, id_aplicativo, preco, quantidade) VALUES(?, ?, ?, ?)`, [id_nova_venda, item.app.id_aplicativo, item.app.preco, item.quantidade], function(err) {
+        if (err) {
+          return console.log(err.message);
+        }
+      });
+    }
+  
+    res.json({ mensagem: "Compra concluída com sucesso" });
+  }, 200);
+});
+
+//---------------------------------------------- Rotas de desenvolvedores ------------------------------------------
 // Rota para login do desenvolvedor
 app.post('/devlogin', (req, res) => {
   const { email, senha } = req.body;
@@ -131,17 +228,6 @@ app.put('/updateprice/:id_aplicativo/:id_desenvolvedor', (req, res) => {
 
       res.json({ message: 'Application price updated successfully' });
     });
-  });
-});
-
-// Rota para adicionar dados
-app.post('/data', (req, res) => {
-  const { name } = req.body;
-  db.run(`INSERT INTO my_table(name) VALUES(?)`, [name], function(err) {
-    if (err) {
-      return console.log(err.message);
-    }
-    res.json({ id: this.lastID });
   });
 });
 
