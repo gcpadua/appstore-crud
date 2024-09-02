@@ -1,0 +1,20 @@
+<div class="app-card-container">
+    <div *ngFor="let app of lista_apps" class="app-card">
+        <h2>{{ app.nome }}</h2>
+        <p class="app-card-text"><strong>Descrição:</strong> {{ app.descricao }}</p>
+        <p class="app-card-text"><strong>Preço:</strong> {{ app.preco | currency }}</p>
+        <p class="app-card-text"><strong>ID do Desenvolvedor:</strong> {{ app.id_desenvolvedor }}</p>
+        <div class="app-card-right">
+            <input #quantidade type="number"  min="1" max="10" style="margin-right: 2px;">
+            <button style="margin-left: 2px;" (click)="adicionarAoCarrinho(app, quantidade.valueAsNumber)">Comprar</button>
+        </div>
+    </div>
+    <div>
+        <p>Carrinho de usuario id: {{usuarioId}}</p>
+        <div *ngFor="let item of listaCompras">
+            <p>{{ item.app.nome }} x {{ item.quantidade }}; Total = {{ item.app.preco * item.quantidade | currency }}</p>
+        </div>
+        <button (click)="finalizarCompra()" *ngIf="listaCompras.length > 0">Finalizar Compra</button>
+        <p *ngIf=" resposta_Compra != '' "> {{ resposta_Compra }}</p>
+    </div>
+</div>

@@ -1,5 +1,47 @@
 .logout-link {
-    position: fixed;
+    position: absolute;
     top: 55px;
     right: 10px;
 }
+
+.full-width-btn-group {
+    display: flex;
+    justify-content: center; /* Centraliza o grupo de botões */
+    width: 80%; /* Garante que o contêiner ocupe toda a largura */
+    margin-left: 10%;
+}
+  
+.full-width-btn-group .btn {
+    flex: 1; /* Faz com que cada botão ocupe espaço igual */
+    text-align: center; /* Centraliza o texto dos botões */
+}
+
+/* Estilo para os botões selecionados (preto com texto branco) */
+.btn-check:checked + .btn-outline-primary {
+    background-color: black; /* Fundo preto */
+    color: white; /* Texto branco */
+    border-color: black; /* Borda preta */
+  }
+  
+  /* Estilo para os botões não selecionados (contorno cinza) */
+  .btn-outline-primary {
+    border-color: gray; /* Contorno cinza */
+    color: gray; /* Texto cinza */
+  }
+  
+  /* Remove o fundo e a borda azul padrão ao focar ou ao passar o mouse */
+  .btn-outline-primary:focus,
+  .btn-outline-primary:active,
+  .btn-outline-primary:hover {
+    background-color: lightgray; /* Fundo cinza claro ao focar ou hover */
+    color: black; /* Texto preto para contraste */
+    border-color: gray; /* Borda cinza */
+  }
+  
+  /* Para remover o efeito azul ao focar */
+  .btn-outline-primary:focus-visible {
+    outline: none; /* Remove o outline azul padrão do foco */
+    box-shadow: none; /* Remove o efeito de sombra azul */
+  }
+  
+  

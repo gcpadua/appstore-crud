@@ -1,7 +1,26 @@
-<p>Usuario: {{ usuaioLogado }}</p>
-<div *ngIf="usuaioLogado == 0">
-    <user-login (userLoginEvent)="handleLogin($event)"></user-login>
+<p>Usuario: {{ usuarioLogado }}</p>
+<div *ngIf="usuarioLogado == 0">
+    <user-login (userLoginEvent)="handleLogin($event)" *ngIf="login_register == 0"></user-login>
+    <user-register *ngIf="login_register == 1"></user-register>
+    <div style="display: flex; justify-content: center;">
+        <a href="#" (click)="login_register = 1" *ngIf="login_register == 0" style="text-align: center;">
+          Não possui conta? Clique aqui para se registrar
+        </a>
+        <a href="#" (click)="login_register = 0" *ngIf="login_register == 1" style="text-align: center;">
+            Já possui uma conta? Clique aqui para fazer login
+        </a>
+    </div>
 </div>
-<div *ngIf="usuaioLogado != 0">
-    <a href="#" class="logout-link" (click)="usuaioLogado = 0">Logout</a>
+<div *ngIf="usuarioLogado != 0">
+    <a href="#" class="logout-link" (click)="usuarioLogado = 0">Logout</a>
+    
+    <user-info-banner [usuarioId]="usuarioLogado"></user-info-banner>
+    <div class="btn-group full-width-btn-group" role="group" aria-label="Basic radio toggle button group">
+        <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" checked>
+        <label class="btn btn-outline-primary" for="btnradio1" (click)="comprar_historico = 0">Comprar Aplicativos</label>
+      
+        <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off">
+        <label class="btn btn-outline-primary" for="btnradio2" (click)="comprar_historico = 1">Historico de compras</label>
+    </div>
+    <lista-compra [usuarioId]="usuarioLogado" *ngIf="comprar_historico == 0"></lista-compra>
 </div>
