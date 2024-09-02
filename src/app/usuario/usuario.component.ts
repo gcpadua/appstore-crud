@@ -14,7 +14,7 @@ import { HistoricoCompraComponent } from "./historico-compra/historico-compra.co
   styleUrl: './usuario.component.css'
 })
 export class UsuarioComponent {
-  usuarioLogado: number = 1;
+  usuarioLogado: number = 0;
   login_register: number = 0;
   comprar_historico: number = 0;
 

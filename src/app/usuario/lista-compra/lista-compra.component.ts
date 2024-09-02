@@ -41,7 +41,6 @@ export class ListaCompraComponent implements OnInit {
       usuarioId: this.usuarioId,
       listaCompras: this.listaCompras
     };
-
     console.log('Iniciando compra: ', compraData);
     this.http.post<responseCompra>('http://localhost:3000/comprarCarrinho', compraData).subscribe({
       next: (response) => {
