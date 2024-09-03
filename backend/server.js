@@ -194,6 +194,20 @@ app.post('/devlogin', (req, res) => {
   });
 });
 
+// Rota para registrar desenvolvedor
+app.post('/devregister', (req, res) => {
+  const { email, senha, primeiroNome, ultimoNome } = req.body;
+  console.log(`Creating cccount with email ${email}, password ${senha}`);
+  db.run(`INSERT INTO desenvolvedor (primeiro_nome, ultimo_nome, email, senha) VALUES ( ?, ?, ?, ?)`, [primeiroNome, ultimoNome, email, senha], function(err) {
+    if (err) {
+      return console.log(err.message);
+    }
+
+    console.log(`Dev created with id ${this.lastID}`);
+    res.json({ id_usuario: this.lastID});
+  });
+});
+
 // Rota para adicionar aplicativos
 app.post('/addaplication', (req, res) => {
   const { nome, descricao, preco, id_desenvolvedor } = req.body;

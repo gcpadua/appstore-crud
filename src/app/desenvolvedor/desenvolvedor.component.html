@@ -1,1 +1,18 @@
-<p>desenvolvedor works!</p>
+<p>Desenvolvedor: {{ devLogado }}</p>
+<div *ngIf="devLogado == 0" style="width: 80%; margin-left: 10%;">
+    <dev-login *ngIf="login_register == 0" (userLoginEvent)="handleLogin($event)"></dev-login>
+    <dev-register *ngIf="login_register == 1" (userRegisterEvent)="handleRegister($event)"></dev-register>
+    <div style="display: flex; justify-content: center;">
+        <a href="#" (click)="login_register = 1" *ngIf="login_register == 0" style="text-align: center;">
+          Não possui conta? Clique aqui para se registrar
+        </a>
+        <a href="#" (click)="login_register = 0" *ngIf="login_register == 1" style="text-align: center;">
+            Já possui uma conta? Clique aqui para fazer login
+        </a>
+    </div>
+</div>
+<div *ngIf="devLogado != 0">
+    <a href="#" class="logout-link" (click)="devLogado = 0">Logout</a>
+    <dev-info-banner [devId]="devLogado"></dev-info-banner>
+    <dev-app-list [devId]="devLogado"></dev-app-list>
+</div>

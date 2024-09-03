@@ -1,5 +1,5 @@
 <p>Usuario: {{ usuarioLogado }}</p>
-<div *ngIf="usuarioLogado == 0">
+<div *ngIf="usuarioLogado == 0" style="width: 80%; margin-left: 10%;">
     <user-login (userLoginEvent)="handleLogin($event)" *ngIf="login_register == 0"></user-login>
     <user-register (userRegisterEvent)="handleRegister($event)"*ngIf="login_register == 1"></user-register>
     <div style="display: flex; justify-content: center;">
