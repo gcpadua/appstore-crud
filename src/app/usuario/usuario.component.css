@@ -44,4 +44,7 @@
     box-shadow: none; /* Remove o efeito de sombra azul */
   }
   
-  
+.percent80-width {
+    width: 80%;
+    margin-left: 10%;
+}

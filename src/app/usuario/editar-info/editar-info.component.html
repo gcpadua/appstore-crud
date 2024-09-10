@@ -1,0 +1,22 @@
+<div>
+    <h2>Alterar dados da conta</h2>
+    <div class="form-group">
+        <label for="novoNome">Novo nome:</label>
+        <input type="text" class="form-control" id="novoNome" name="novoNome" [(ngModel)]="primeiroNome">
+    </div>
+    <div class="form-group">
+        <label for="novoSobrenome">Novo sobrenome:</label>
+        <input type="text" class="form-control" id="novoSobrenome" name="novoSobrenome" [(ngModel)]="ultimoNome">
+    </div>
+    <div class="form-group">
+        <label for="novoEmail">Novo email:</label>
+        <input type="email" class="form-control" id="novoEmail" name="novoEmail" [(ngModel)]="email">
+    </div>
+    <div class="form-group">
+        <label for="novaSenha">Nova senha:</label>
+        <input type="password" class="form-control" id="novaSenha" name="novaSenha" [(ngModel)]="senha">
+    </div>
+    <span><button class="btn btn-primary" (click)="onSubmit()">Salvar</button></span>
+    <span style="float: right;"><button class="btn btn-danger" (click)="onDelete()">Deletar conta</button></span>
+</div>
+

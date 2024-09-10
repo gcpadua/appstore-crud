@@ -1,7 +1,9 @@
 <div class="app-card-container">
+    <p *ngIf="true">Você comprou {{total}} aplicativos com preço maior que R$<input type="number" min="0" max="999" [(ngModel)]="valor" (input)="onValorChange()"></p>
     <div *ngFor="let compra of historico" class="app-card">
         <h2>{{ compra.nome }}</h2>
         <!-- <p class="app-card-text"><strong>Descrição:</strong> {{ compra.descricao }}</p> -->
         <p class="app-card-text"><strong>Comprado:</strong> {{ compra.preco | currency }} x {{ compra.quantidade }}</p>
+        <button (click)="deleteItem(compra.id_item_venda)">Deletar Compra</button>
     </div>
 </div>

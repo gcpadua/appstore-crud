@@ -176,6 +176,66 @@ app.get('/compras/:userid', (req, res) => {
   });
 });
 
+// Rota para enumerar compras de um usuário
+app.get('/totalCompras/:userid/:having', (req, res) => {
+  const { userid, having } = req.params;
+  console.log(`Obtendo numero de compras do usuario de id ${userid} com valor maior que ${having}`);
+  db.all(`SELECT SUM(iv.quantidade) AS total_apps_comprados FROM item_venda iv NATURAL JOIN aplicativo a NATURAL JOIN venda v WHERE a.preco > ? GROUP BY v.id_usuario HAVING v.id_usuario = ?`, [having, userid], (err, rows) => {
+    if (err) {
+      return console.log(err.message);
+    }
+    res.json(rows);
+  });
+});
+
+// Rota para listar apps não comprados por um usuário
+app.get('/naoComprados/:userid', (req, res) => {
+  const { userid } = req.params;
+  console.log(`Obtendo apps não comprados do usuario de id ${userid}`);
+  db.all(`SELECT a.id_aplicativo, a.nome, a.descricao, a.preco, a.id_desenvolvedor FROM aplicativo a NATURAL JOIN item_venda iv WHERE iv.id_aplicativo NOT IN (SELECT item_venda.id_aplicativo FROM item_venda JOIN aplicativo ON item_venda.id_aplicativo = aplicativo.id_aplicativo JOIN venda ON item_venda.id_venda = venda.id_venda WHERE venda.id_usuario = ?)`, [userid], (err, rows) => {
+    if (err) {
+      return console.log(err.message);
+    }
+    res.json(rows);
+  });
+});
+
+// Rota para deletar item de venda
+app.delete('/deleteItemVenda/:id_venda/', (req, res) => {
+  const { id_venda } = req.params;
+  console.log(`Deletando item de venda com id ${id_venda}`);
+  db.run(`DELETE FROM item_venda WHERE id_item_venda = ?`, [id_venda], function(err) {
+    if (err) {
+      return console.log(err.message);
+    }
+    res.json({ message: 'Item de venda deletado com sucesso' });
+  });
+});
+
+//Rota para deletar usuario
+app.delete('/deleteUser/:id_usuario', (req, res) => {
+  const { id_usuario } = req.params;
+  console.log(`Deletando usuario com id ${id_usuario}`);
+  db.run(`DELETE FROM usuario WHERE id_usuario = ?`, [id_usuario], function(err) {
+    if (err) {
+      return console.log(err.message);
+    }
+    res.json({ message: 'Usuario deletado com sucesso' });
+  });
+});
+
+//Rota para editar usuario
+app.put('/editUser', (req, res) => {
+  const { id_usuario, primeiroNome, ultimoNome, email, senha } = req.body;
+  console.log(`Editando usuario com id ${id_usuario}`, req.body);
+  db.run(`UPDATE usuario SET email = ?, senha = ?, primeiro_nome = ?, ultimo_nome = ? WHERE id_usuario = ?`, [email, senha, primeiroNome, ultimoNome, id_usuario], function(err) {
+    if (err) {
+      return console.log(err.message);
+    }
+    res.json({ message: 'Usuario editado com sucesso' });
+  });
+});
+
 //---------------------------------------------- Rotas de desenvolvedores ------------------------------------------
 // Rota para login do desenvolvedor
 app.post('/devlogin', (req, res) => {

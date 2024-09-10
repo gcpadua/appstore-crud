@@ -24,4 +24,19 @@
     </div>
     <lista-compra [usuarioId]="usuarioLogado" *ngIf="comprar_historico == 0"></lista-compra>
     <user-historico-compra [usuarioId]="usuarioLogado" *ngIf="comprar_historico == 1"></user-historico-compra>
+    <div class="accordion percent80-width" id="accountAccordion">
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="accountHeading">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accountCollapse" aria-expanded="false" aria-controls="accountCollapse">
+                    Alterar informações da conta
+                </button>
+            </h2>
+            <div id="accountCollapse" class="accordion-collapse collapse" aria-labelledby="accountHeading" data-bs-parent="#accountAccordion">
+                <div class="accordion-body">
+                    <!-- Your content for changing account information goes here -->
+                    <user-editar-info [usuarioId]="usuarioLogado"></user-editar-info>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

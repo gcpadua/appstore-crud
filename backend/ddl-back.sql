@@ -39,7 +39,7 @@ CREATE TABLE "aplicativo" (
 	"preco"	NUMERIC NOT NULL,
 	"id_desenvolvedor"	INTEGER,
 	PRIMARY KEY("id_aplicativo" AUTOINCREMENT),
-	CONSTRAINT "fk-id_desenvolvedor" FOREIGN KEY("id_desenvolvedor") REFERENCES "desenvolvedor"("id_desenvolvedor")
+	CONSTRAINT "fk-id_desenvolvedor" FOREIGN KEY("id_desenvolvedor") REFERENCES "desenvolvedor"("id_desenvolvedor") ON DELETE CASCADE
 );
 
 INSERT INTO aplicativo (nome, descricao, preco, id_desenvolvedor) VALUES ('App 1', 'App 1 description', 1.99, 1);
@@ -55,7 +55,7 @@ CREATE TABLE "venda" (
 	"data_venda"	TEXT,
 	"total"	NUMERIC,
 	PRIMARY KEY("id_venda" AUTOINCREMENT),
-	CONSTRAINT "fk-id_usuario" FOREIGN KEY("id_usuario") REFERENCES "usuario"("id_usuario")
+	CONSTRAINT "fk-id_usuario" FOREIGN KEY("id_usuario") REFERENCES "usuario"("id_usuario") ON DELETE CASCADE
 );
 
 INSERT INTO venda (id_usuario, data_venda, total) VALUES (1, '2021-01-01', 1.99);
@@ -71,8 +71,8 @@ CREATE TABLE "item_venda" (
 	"preco"	INTEGER NOT NULL,
 	"quantidade"	INTEGER NOT NULL,
 	PRIMARY KEY("id_item_venda" AUTOINCREMENT),
-	CONSTRAINT "fk-id_aplicativo" FOREIGN KEY("id_aplicativo") REFERENCES "aplicativo"("id_aplicativo"),
-	CONSTRAINT "fk-id_venda" FOREIGN KEY("id_venda") REFERENCES "venda"("id_venda")
+	CONSTRAINT "fk-id_aplicativo" FOREIGN KEY("id_aplicativo") REFERENCES "aplicativo"("id_aplicativo") ON DELETE CASCADE,
+	CONSTRAINT "fk-id_venda" FOREIGN KEY("id_venda") REFERENCES "venda"("id_venda") ON DELETE CASCADE
 );
 
 INSERT INTO item_venda (id_venda, id_aplicativo, preco, quantidade) VALUES (1, 1, 1.99, 1);
