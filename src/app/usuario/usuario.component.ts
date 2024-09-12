@@ -24,6 +24,7 @@ export class UsuarioComponent {
   }
 
   handleRegister(numberReceived: number) {
+    this.login_register = 0;
     this.usuarioLogado = numberReceived;
   }
 }

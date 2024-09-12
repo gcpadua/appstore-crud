@@ -8,7 +8,7 @@ interface UserResponse {
 }
 
 @Component({
-  selector: 'user-editar-info',
+  selector: 'dev-editar-info',
   standalone: true,
   imports: [FormsModule, CommonModule],
   templateUrl: './editar-info.component.html',
@@ -16,7 +16,7 @@ interface UserResponse {
 })
 export class EditarInfoComponent {
   constructor(private http: HttpClient) {} // Injeta o HttpClient
-  @Input() usuarioId: number = 0;
+  @Input() desenvolvedorId: number = 0;
   primeiroNome: string = '';
   ultimoNome: string = '';
   email: string = '';
@@ -25,7 +25,7 @@ export class EditarInfoComponent {
   apiResponse: string = '';
 
   onDelete(){
-    this.http.delete<UserResponse>('http://localhost:3000/deleteUser/' + this.usuarioId).subscribe({
+    this.http.delete<UserResponse>('http://localhost:3000/deleteDev/' + this.desenvolvedorId).subscribe({
       next: (response) => {
         console.log('Resposta da API:', response);
         this.apiResponse = response.mensagem;
@@ -40,14 +40,14 @@ export class EditarInfoComponent {
   }
   onSubmit() {
     const editedProfile = {
-      id_usuario: this.usuarioId,
+      id_desenvolvedor: this.desenvolvedorId,
       primeiroNome: this.primeiroNome,
       ultimoNome: this.ultimoNome,
       email: this.email,
       senha: this.senha
     };
 
-    this.http.put<UserResponse>('http://localhost:3000/editUser', editedProfile).subscribe({
+    this.http.put<UserResponse>('http://localhost:3000/editDev', editedProfile).subscribe({
       next: (response) => {
         console.log('Resposta da API:', response);
       },

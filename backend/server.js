@@ -220,7 +220,7 @@ app.delete('/deleteUser/:id_usuario', (req, res) => {
     if (err) {
       return console.log(err.message);
     }
-    res.json({ message: 'Usuario deletado com sucesso' });
+    res.json({ mensagem: 'Usuario deletado com sucesso' });
   });
 });
 
@@ -232,7 +232,7 @@ app.put('/editUser', (req, res) => {
     if (err) {
       return console.log(err.message);
     }
-    res.json({ message: 'Usuario editado com sucesso' });
+    res.json({ mensagem: 'Usuario editado com sucesso' });
   });
 });
 
@@ -330,6 +330,31 @@ app.put('/updateprice/:id_aplicativo/:id_desenvolvedor', (req, res) => {
     });
   });
 });
+
+//Rota para editar desenvolvedor
+app.put('/editDev', (req, res) => {
+  const { id_desenvolvedor, primeiroNome, ultimoNome, email, senha } = req.body;
+  console.log(`Editando dev com id ${id_desenvolvedor}`, req.body);
+  db.run(`UPDATE desenvolvedor SET email = ?, senha = ?, primeiro_nome = ?, ultimo_nome = ? WHERE id_desenvolvedor = ?`, [email, senha, primeiroNome, ultimoNome, id_desenvolvedor], function(err) {
+    if (err) {
+      return console.log(err.message);
+    }
+    res.json({ mensagem: 'Desenvolvedor editado com sucesso' });
+  });
+});
+
+//Rota para deletar usuario
+app.delete('/deleteDev/:id_dev', (req, res) => {
+  const { id_dev } = req.params;
+  console.log(`Deletando dev com id ${id_dev}`);
+  db.run(`DELETE FROM desenvolvedor WHERE id_desenvolvedor = ?`, [id_dev], function(err) {
+    if (err) {
+      return console.log(err.message);
+    }
+    res.json({ mensagem: 'Desenvolvedor deletado com sucesso' });
+  });
+});
+
 
 // Iniciar o servidor
 app.listen(port, () => {

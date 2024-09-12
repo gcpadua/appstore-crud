@@ -34,7 +34,24 @@ export class HistoricoCompraComponent implements OnInit {
   historico: itemVenda[] = [];
   total: number = 0;
   valor: number = 0;
+  appsComprados: number = 0;
 
+  getAppsComprados() {
+    this.http.get<totalCompras[]>('http://localhost:3000/totalCompras/'+this.usuarioId+'/0').subscribe({
+      next: (response) => {
+        console.log(response);
+        if (response.length == 0) {
+          this.appsComprados = 0;
+          return;
+        }
+        console.log('Total de compras: ',response[0].total_apps_comprados);
+        this.appsComprados = response[0].total_apps_comprados;
+      },
+      error: (error) => {
+        console.error('Erro na requisição:', error);
+      }
+    });
+  }
   deleteItem(id: number) {
     this.http.delete('http://localhost:3000/deleteItemVenda/'+id).subscribe({
       next: (response) => {
@@ -79,6 +96,7 @@ export class HistoricoCompraComponent implements OnInit {
   }
   ngOnInit(): void {
     this.getTotal();
+    this.getAppsComprados();
     this.getHistorico();
   }
 }
