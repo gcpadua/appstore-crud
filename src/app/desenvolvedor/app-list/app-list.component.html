@@ -8,6 +8,7 @@
             <input #valor type="number"  min="1" max="100" style="margin-right: 2px;">
             <button style="margin-left: 2px;" (click)="alterarPreco(app.id_aplicativo, valor.valueAsNumber)">Alterar preço</button>
         </div>
+        <button class="btn btn-danger" style="margin-top: 10px;" (click)="delete(app.id_aplicativo)">Deletar app</button>
     </div>
     <!-- Insira aqui os campos de input de nome, descrição e preço para a inserção de novos aplicativos -->
     <!-- Assosciar o nome a variavel novo_nome, a descriçaõ a variavel novo_desc e preco a novo_preco -->

@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http'; // Importa o HttpClient
 import { CommonModule } from '@angular/common';
 
@@ -22,7 +23,7 @@ interface responseCompra {
 @Component({
   selector: 'lista-compra',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './lista-compra.component.html',
   styleUrl: './lista-compra.component.css'
 })
@@ -34,8 +35,21 @@ export class ListaCompraComponent implements OnInit {
   lista_apps: Aplicativo[] = [];
   listaCompras: ItemCarrinho[] = []; 
 
+  checkbox: boolean = false;
+
   resposta_Compra: string = '';
 
+  changeCheckbox() {
+    this.checkbox = !this.checkbox;
+    if (this.checkbox) {
+      console.log('Checkbox marcado.');
+      this.getAppsNotOwned();
+    }
+    else {
+      console.log('Checkbox desmarcado.');
+      this.getAllApps();
+    }
+  }
   finalizarCompra() {
     const compraData = {
       usuarioId: this.usuarioId,
@@ -69,7 +83,19 @@ export class ListaCompraComponent implements OnInit {
     }
   }
 
-  ngOnInit(): void {
+  getAppsNotOwned() {
+    this.lista_apps = [];
+    this.http.get<Aplicativo[]>('http://localhost:3000/naoComprados/'+this.usuarioId).subscribe({
+      next: (response) => {
+        this.lista_apps = response;
+      },
+      error: (error) => {
+        console.error('Erro na requisição:', error);
+      }
+    });
+  }
+
+  getAllApps() {
     this.http.get<Aplicativo[]>('http://localhost:3000/select/aplicativo').subscribe({
       next: (response) => {
         this.lista_apps = response;
@@ -78,5 +104,8 @@ export class ListaCompraComponent implements OnInit {
         console.error('Erro na requisição:', error);
       }
     });
+  }
+  ngOnInit(): void {
+    this.getAllApps();
   }
 }

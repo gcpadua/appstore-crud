@@ -2,7 +2,7 @@ CREATE TABLE "usuario" (
 	"id_usuario"	INTEGER,
 	"primeiro_nome"	TEXT NOT NULL,
 	"ultimo_nome"	TEXT NOT NULL,
-	"email"	TEXT NOT NULL,
+	"email"	TEXT NOT NULL UNIQUE,
   	"senha" TEXT NOT NULL,
 	"saldo"	NUMERIC,
 	PRIMARY KEY("id_usuario" AUTOINCREMENT)
@@ -19,7 +19,7 @@ CREATE TABLE "desenvolvedor" (
 	"id_desenvolvedor"	INTEGER,
 	"primeiro_nome"	TEXT NOT NULL,
 	"ultimo_nome"	TEXT NOT NULL,
-	"email"	TEXT NOT NULL,
+	"email"	TEXT NOT NULL UNIQUE,
   	"senha" TEXT NOT NULL,
 	"saldo"	NUMERIC,
 	PRIMARY KEY("id_desenvolvedor" AUTOINCREMENT)

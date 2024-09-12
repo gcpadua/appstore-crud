@@ -30,6 +30,20 @@ export class AppListComponent implements OnInit {
   novo_desc: string = '';
   novo_preco: number = 0;
 
+
+  delete(appID: number) {
+    this.http.delete('http://localhost:3000/deleteApp/'+appID).subscribe({
+      next: (response) => {
+        console.log('Resposta:', response);
+        this.fetchApps();
+      },
+      error: (error) => {
+        console.error('Erro na requisição:', error);
+      }
+    });
+
+  }
+
   adicionarApp(){
     console.log('Adicionando aplicativo:', this.novo_nome, this.novo_desc, this.novo_preco);
     const body = { 

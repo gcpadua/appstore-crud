@@ -192,7 +192,7 @@ app.get('/totalCompras/:userid/:having', (req, res) => {
 app.get('/naoComprados/:userid', (req, res) => {
   const { userid } = req.params;
   console.log(`Obtendo apps não comprados do usuario de id ${userid}`);
-  db.all(`SELECT a.id_aplicativo, a.nome, a.descricao, a.preco, a.id_desenvolvedor FROM aplicativo a NATURAL JOIN item_venda iv WHERE iv.id_aplicativo NOT IN (SELECT item_venda.id_aplicativo FROM item_venda JOIN aplicativo ON item_venda.id_aplicativo = aplicativo.id_aplicativo JOIN venda ON item_venda.id_venda = venda.id_venda WHERE venda.id_usuario = ?)`, [userid], (err, rows) => {
+  db.all(`SELECT a.id_aplicativo, a.nome, a.descricao, a.preco, a.id_desenvolvedor FROM aplicativo a LEFT JOIN item_venda iv ON iv.id_aplicativo = a.id_aplicativo LEFT JOIN venda v ON v.id_venda = iv.id_venda WHERE a.id_aplicativo NOT IN (SELECT a.id_aplicativo FROM aplicativo a NATURAL JOIN item_venda iv NATURAL JOIN venda v WHERE v.id_usuario = ?)`, [userid], (err, rows) => {
     if (err) {
       return console.log(err.message);
     }
@@ -233,6 +233,18 @@ app.put('/editUser', (req, res) => {
       return console.log(err.message);
     }
     res.json({ mensagem: 'Usuario editado com sucesso' });
+  });
+});
+
+//Rota para obter apps não comprados por um usuário
+app.get('/getAppsNotBought/:id_usuario', (req, res) => {
+  const { id_usuario } = req.params;
+  console.log(`Obtendo apps não comprados pelo usuário de id ${id_usuario}`);
+  db.all(`SELECT * FROM aplicativo WHERE id_aplicativo NOT IN (SELECT id_aplicativo FROM item_venda WHERE id_venda IN (SELECT id_venda FROM venda WHERE id_usuario = ?))`, [id_usuario], (err, rows) => {
+    if (err) {
+      return console.log(err.message);
+    }
+    res.json(rows);
   });
 });
 
@@ -352,6 +364,18 @@ app.delete('/deleteDev/:id_dev', (req, res) => {
       return console.log(err.message);
     }
     res.json({ mensagem: 'Desenvolvedor deletado com sucesso' });
+  });
+});
+
+//Rota para deletar aplicativo
+app.delete('/deleteApp/:id_app', (req, res) => {
+  const { id_app } = req.params;
+  console.log(`Deletando aplicativo com id ${id_app}`);
+  db.run(`DELETE FROM aplicativo WHERE id_aplicativo = ?`, [id_app], function(err) {
+    if (err) {
+      return console.log(err.message);
+    }
+    res.json({ mensagem: 'Aplicativo deletado com sucesso' });
   });
 });
 
