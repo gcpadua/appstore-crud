@@ -168,7 +168,7 @@ app.post('/comprarCarrinho', (req, res) => {
 app.get('/compras/:userid', (req, res) => {
   const { userid } = req.params;
   console.log(`Selecting purchases of user with id ${userid}`);
-  db.all(`SELECT * FROM item_venda JOIN aplicativo ON item_venda.id_aplicativo = aplicativo.id_aplicativo JOIN venda ON item_venda.id_venda = venda.id_venda WHERE venda.id_usuario = ?`, [userid], (err, rows) => {
+  db.all(`SELECT * FROM item_venda iv JOIN aplicativo a ON iv.id_aplicativo = a.id_aplicativo JOIN venda v ON v.id_venda = iv.id_venda WHERE v.id_usuario = ?`, [userid], (err, rows) => {
     if (err) {
       return console.log(err.message);
     }
@@ -180,7 +180,7 @@ app.get('/compras/:userid', (req, res) => {
 app.get('/totalCompras/:userid/:having', (req, res) => {
   const { userid, having } = req.params;
   console.log(`Obtendo numero de compras do usuario de id ${userid} com valor maior que ${having}`);
-  db.all(`SELECT SUM(iv.quantidade) AS total_apps_comprados FROM item_venda iv NATURAL JOIN aplicativo a NATURAL JOIN venda v WHERE a.preco > ? GROUP BY v.id_usuario HAVING v.id_usuario = ?`, [having, userid], (err, rows) => {
+  db.all(`SELECT SUM(iv.quantidade) AS total_apps_comprados FROM item_venda iv JOIN aplicativo a ON a.id_aplicativo = iv.id_aplicativo JOIN venda v ON v.id_venda = iv.id_venda WHERE a.preco > ? GROUP BY v.id_usuario HAVING v.id_usuario = ?`, [having, userid], (err, rows) => {
     if (err) {
       return console.log(err.message);
     }
@@ -192,7 +192,7 @@ app.get('/totalCompras/:userid/:having', (req, res) => {
 app.get('/naoComprados/:userid', (req, res) => {
   const { userid } = req.params;
   console.log(`Obtendo apps não comprados do usuario de id ${userid}`);
-  db.all(`SELECT a.id_aplicativo, a.nome, a.descricao, a.preco, a.id_desenvolvedor FROM aplicativo a LEFT JOIN item_venda iv ON iv.id_aplicativo = a.id_aplicativo LEFT JOIN venda v ON v.id_venda = iv.id_venda WHERE a.id_aplicativo NOT IN (SELECT a.id_aplicativo FROM aplicativo a NATURAL JOIN item_venda iv NATURAL JOIN venda v WHERE v.id_usuario = ?)`, [userid], (err, rows) => {
+  db.all(`SELECT a.id_aplicativo, a.nome, a.descricao, a.preco, a.id_desenvolvedor FROM aplicativo a LEFT JOIN item_venda iv ON iv.id_aplicativo = a.id_aplicativo LEFT JOIN venda v ON v.id_venda = iv.id_venda WHERE a.id_aplicativo NOT IN (SELECT a.id_aplicativo FROM item_venda iv JOIN aplicativo a ON iv.id_aplicativo = a.id_aplicativo JOIN venda v ON v.id_venda = iv.id_venda WHERE v.id_usuario = ?) GROUP BY a.id_aplicativo`, [userid], (err, rows) => {
     if (err) {
       return console.log(err.message);
     }
