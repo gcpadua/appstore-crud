@@ -14,7 +14,7 @@ import { EditarInfoComponent } from './editar-info/editar-info.component';
   styleUrl: './desenvolvedor.component.css'
 })
 export class DesenvolvedorComponent {
-  devLogado: number = 1;
+  devLogado: number = 0;
   login_register: number = 0;
 
   handleLogin(numberReceived: number) {

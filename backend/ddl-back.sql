@@ -125,6 +125,7 @@ BEGIN
 	UPDATE venda SET total = total + (new.preco * new.quantidade) WHERE id_venda = new.id_venda;
 END;
 
+-- Trigger de exclusão de venda
 CREATE TRIGGER delete_venda_if_last_item
 AFTER DELETE ON item_venda
 FOR EACH ROW

@@ -355,7 +355,7 @@ app.put('/editDev', (req, res) => {
   });
 });
 
-//Rota para deletar usuario
+//Rota para deletar desenvolvedor
 app.delete('/deleteDev/:id_dev', (req, res) => {
   const { id_dev } = req.params;
   console.log(`Deletando dev com id ${id_dev}`);
