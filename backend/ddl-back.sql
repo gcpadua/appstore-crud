@@ -119,10 +119,20 @@ END;
 
 
 -- Trigger atualiza valor da compra
-CREATE TRIGGER "atualiza_total_compra" AFTER INSERT ON "item_venda"
+CREATE TRIGGER atualiza_total_compra AFTER INSERT ON item_venda
 FOR EACH ROW
 BEGIN
-	UPDATE "venda" SET total = total + (new.preco * new.quantidade) WHERE id_venda = new.id_venda;
+	UPDATE venda SET total = total + (new.preco * new.quantidade) WHERE id_venda = new.id_venda;
 END;
 
-SELECT * FROM item_venda JOIN aplicativo ON item_venda.id_aplicativo = aplicativo.id_aplicativo JOIN venda ON item_venda.id_venda = venda.id_venda WHERE venda.id_usuario = ?;
+CREATE TRIGGER delete_venda_if_last_item
+AFTER DELETE ON item_venda
+FOR EACH ROW
+BEGIN
+    DELETE FROM venda
+    WHERE id_venda = OLD.id_venda
+    AND NOT EXISTS (
+        SELECT 1 FROM item_venda
+        WHERE id_venda = OLD.id_venda
+    );
+END;
